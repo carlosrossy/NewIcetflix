@@ -1,6 +1,22 @@
 {
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
-    "strict": true
-  }
+    "baseUrl": "./src",
+    "paths": {
+      "@features/*": ["features/*"],
+      "@global/*": ["global/*"],
+      "@assets/*": ["assets/*"],
+      "@styles/*": ["styles/*"]
+    },
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "jsx": "react-native",
+    "moduleResolution": "node",
+    "noEmit": true,
+    "strict": true,
+    "target": "esnext"
+  },
+  "exclude": ["node_modules", "babel.config.js", "metro.config.js"]
 }
