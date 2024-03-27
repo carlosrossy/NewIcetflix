@@ -11,9 +11,11 @@ import {
 import Home from "@features/screens/Home";
 import theme from "@global/styles/theme";
 
+import { queryClient } from "./src/global/config/react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
+
 import { ActivityIndicator, View } from "react-native";
 import { ThemeProvider } from "styled-components";
-
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -38,7 +40,9 @@ export default function App() {
   }
   return (
     <ThemeProvider theme={theme}>
-      <Home />
+      <QueryClientProvider client={queryClient}>
+        <Home />
+      </QueryClientProvider>
     </ThemeProvider>
   );
 }
