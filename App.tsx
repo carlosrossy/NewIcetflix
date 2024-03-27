@@ -32,7 +32,7 @@ export default function App() {
           justifyContent: "center",
         }}
       >
-        <ActivityIndicator color={"#8FB2F5"} />
+        <ActivityIndicator color={"#56AB2F"} />
       </View>
     );
   }

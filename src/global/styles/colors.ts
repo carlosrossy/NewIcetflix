@@ -6,6 +6,8 @@ export const colors = {
   TERTIARY: "#121011",
   GREEN_LIGHT: "#A8E063",
 
+  RED: "#FF0000",
+
   GRAY_900: "#13131A",
   GRAY_800: "#16161F",
   GRAY_700: "#1C1C27",
