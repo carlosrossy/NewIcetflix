@@ -16,6 +16,9 @@ import { QueryClientProvider } from "@tanstack/react-query";
 
 import { ActivityIndicator, View } from "react-native";
 import { ThemeProvider } from "styled-components";
+import SignIn from "@features/auth/SignIn";
+import { AppProvider } from "@global/context";
+import Routes from "@global/routes";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -39,10 +42,10 @@ export default function App() {
     );
   }
   return (
-    <ThemeProvider theme={theme}>
+    <AppProvider>
       <QueryClientProvider client={queryClient}>
-        <Home />
+        <Routes />
       </QueryClientProvider>
-    </ThemeProvider>
+    </AppProvider>
   );
 }

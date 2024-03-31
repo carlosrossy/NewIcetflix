@@ -28,8 +28,8 @@ interface IconsInput {
 const iconsInput: IconsInput = {
   email: <MaterialCommunityIcons name="email" size={22} color="#FFFFFF" />,
   emailError: <MaterialCommunityIcons name="email" size={22} color="#FF0000" />,
-  password: <FontAwesome5 name="lock" size={22} color="#FFFFFF" />,
-  passwordError: <FontAwesome5 name="lock" size={22} color="#FF0000" />,
+  password: <FontAwesome5 name="lock" size={20} color="#FFFFFF" />,
+  passwordError: <FontAwesome5 name="lock" size={20} color="#FF0000" />,
   search: <FontAwesome5 name="search" size={22} color="#FFFFFF" />,
   searchError: <FontAwesome5 name="search" size={22} color="#FF0000" />,
   openEye: <FontAwesome5 name="eye" size={22} color="#FFFFFF" />,
