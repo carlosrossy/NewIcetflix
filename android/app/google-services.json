@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "880943020232",
-    "project_id": "icetflix-68633",
-    "storage_bucket": "icetflix-68633.appspot.com"
+    "project_number": "74452407986",
+    "project_id": "icetflix-d2f99",
+    "storage_bucket": "icetflix-d2f99.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:880943020232:android:93f8453b6d0574e00a4dfd",
+        "mobilesdk_app_id": "1:74452407986:android:b46dfce9280b0fff905bab",
         "android_client_info": {
           "package_name": "com.icetflix"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDfsCsV7EWYLbiz9FhnL304LIdJ9LF6pcI"
+          "current_key": "AIzaSyBe5EjLu2QqBd1nURwHmZ89t9QAvJUJc7A"
         }
       ],
       "services": {

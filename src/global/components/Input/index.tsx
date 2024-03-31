@@ -7,6 +7,7 @@ import Text from "../Text";
 import { Spacer } from "../Spacer";
 
 import { FontAwesome5 } from "@expo/vector-icons";
+import { FontAwesome } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 export type TypeIConsInput =
@@ -19,7 +20,10 @@ export type TypeIConsInput =
   | "openEye"
   | "openEyeError"
   | "closeEye"
-  | "closeEyeError";
+  | "closeEyeError"
+  | "user"
+  | "userError"
+  ;
 
 interface IconsInput {
   [key: string]: JSX.Element;
@@ -36,6 +40,8 @@ const iconsInput: IconsInput = {
   openEyeError: <FontAwesome5 name="eye" size={22} color="##FF0000" />,
   closeEye: <FontAwesome5 name="eye-slash" size={22} color="#FFFFFF" />,
   closeEyeError: <FontAwesome5 name="eye-slash" size={22} color="#FF0000" />,
+  user: <FontAwesome name="user" size={22} color="#FFFFFF" />,
+  userError: <FontAwesome name="user" size={22} color="#FF0000" />,
 };
 
 interface Props extends TextInputProps {

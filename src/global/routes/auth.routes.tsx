@@ -1,5 +1,6 @@
 import Details from "@features/Details";
 import SignIn from "@features/auth/SignIn";
+import SignUp from "@features/auth/SignUp";
 import Home from "@features/screens/Home";
 import {
   NativeStackNavigationProp,
@@ -24,8 +25,7 @@ export function AuthRoutes() {
       }}
     >
       <Stack.Screen name="SignIn" component={SignIn} />
-
-      {/* <Stack.Screen name="SignUp" component={SignUp} /> */}
+      <Stack.Screen name="SignUp" component={SignUp} />
     </Stack.Navigator>
   );
 }

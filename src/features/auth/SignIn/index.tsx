@@ -11,6 +11,9 @@ import { Input } from "@global/components/Input";
 import { Spacer } from "@global/components/Spacer";
 import Text from "@global/components/Text";
 import Button from "@global/components/Button";
+import { useAuth } from "@global/context/auth";
+import { useNavigation } from "@react-navigation/native";
+import { AuthScreenNavigationProp } from "@global/routes/auth.routes";
 
 const schema = yup.object().shape({
   email: yup.string().email("Email inválido").required("Email é obrigatório"),
@@ -18,7 +21,9 @@ const schema = yup.object().shape({
 });
 
 export default function SignIn() {
+  const navigation = useNavigation<AuthScreenNavigationProp>();
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
+  const { SingIn, islogin, forgotPassword } = useAuth();
 
   const {
     control,
@@ -27,6 +32,16 @@ export default function SignIn() {
   } = useForm({
     resolver: yupResolver(schema),
   });
+
+  function handleSignIn(data: { email: string; password: string }) {
+    const { email, password } = data;
+    SingIn(email, password, toggleCheckBox);
+  }
+
+  //   function handleForgot(data: { email: string }) {
+  //     const { email } = data;
+  //     forgotPassword(email);
+  //   }
 
   return (
     <S.Container>
@@ -69,6 +84,8 @@ export default function SignIn() {
           )}
         />
 
+        <Spacer height={10} />
+
         <S.Row>
           <S.CheckBoxContainer
             onPress={() => setToggleCheckBox((oldValue: boolean) => !oldValue)}
@@ -107,8 +124,8 @@ export default function SignIn() {
       <S.Footer>
         <Button
           title="ENTRAR"
-          //   onPress={handleSubmit(handleSingIn)}
-          //   activeLoad={islogin}
+          onPress={handleSubmit(handleSignIn)}
+          // activeLoad={islogin}
         />
 
         <Spacer height={20} />
@@ -117,7 +134,7 @@ export default function SignIn() {
           <Text variant="Inter_500Medium" color="GRAY">
             Não tem uma conta?{" "}
           </Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
             <Text variant="Inter_500Medium" color="PRIMARY">
               Inscrever-se
             </Text>
