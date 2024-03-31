@@ -14,6 +14,7 @@ import Button from "@global/components/Button";
 import { useAuth } from "@global/context/auth";
 import { useNavigation } from "@react-navigation/native";
 import { AuthScreenNavigationProp } from "@global/routes/auth.routes";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const schema = yup.object().shape({
   email: yup.string().email("Email inválido").required("Email é obrigatório"),
@@ -44,103 +45,110 @@ export default function SignIn() {
   //   }
 
   return (
-    <S.Container>
-      <StatusBar barStyle="default" backgroundColor={"#121011"} />
+    <KeyboardAwareScrollView
+      contentContainerStyle={{ flex: 1 }}
+      showsVerticalScrollIndicator={false}
+    >
+      <S.Container>
+        <StatusBar barStyle="default" backgroundColor={"#121011"} />
 
-      <S.Form>
-        <Controller
-          control={control}
-          name="email"
-          rules={{ required: "Email é obrigatório" }}
-          render={({ field: { value, onChange } }) => (
-            <Input
-              onChangeText={onChange}
-              value={value}
-              title="E-mail"
-              placeholder="E-mail"
-              keyboardType="email-address"
-              autoCapitalize={"none"}
-              errors={errors?.email}
-              type="email"
-            />
-          )}
-        />
-        <Spacer height={12} />
-        <Controller
-          control={control}
-          name="password"
-          rules={{ required: "Senha é obrigatório" }}
-          render={({ field: { value, onChange } }) => (
-            <Input
-              onChangeText={onChange}
-              title="Senha"
-              value={value}
-              isActivePassword
-              placeholder="Senha"
-              autoCapitalize={"none"}
-              errors={errors?.password}
-              type="password"
-            />
-          )}
-        />
+        <S.Form>
+          <Controller
+            control={control}
+            name="email"
+            rules={{ required: "Email é obrigatório" }}
+            render={({ field: { value, onChange } }) => (
+              <Input
+                onChangeText={onChange}
+                value={value}
+                title="E-mail"
+                placeholder="E-mail"
+                keyboardType="email-address"
+                autoCapitalize={"none"}
+                errors={errors?.email}
+                type="email"
+              />
+            )}
+          />
+          <Spacer height={12} />
+          <Controller
+            control={control}
+            name="password"
+            rules={{ required: "Senha é obrigatório" }}
+            render={({ field: { value, onChange } }) => (
+              <Input
+                onChangeText={onChange}
+                title="Senha"
+                value={value}
+                isActivePassword
+                placeholder="Senha"
+                autoCapitalize={"none"}
+                errors={errors?.password}
+                type="password"
+              />
+            )}
+          />
 
-        <Spacer height={10} />
+          <Spacer height={10} />
 
-        <S.Row>
-          <S.CheckBoxContainer
-            onPress={() => setToggleCheckBox((oldValue: boolean) => !oldValue)}
-          >
-            <S.CheckBox
-              disabled={false}
-              value={toggleCheckBox}
-              onValueChange={setToggleCheckBox}
-              color="#56AB2F"
-              style={{
-                borderTopColor: "#5B5B58",
-                borderBottomColor: "#5B5B58",
-                borderEndColor: "#5B5B58",
-                borderStartColor: "#5B5B58",
-                marginTop: -3,
-              }}
-            />
-            <Text
-              variant="Inter_500Medium"
-              color="GRAY"
-              fontSize={12}
-              marginLeft="sm"
+          <S.Row>
+            <S.CheckBoxContainer
+              onPress={() =>
+                setToggleCheckBox((oldValue: boolean) => !oldValue)
+              }
             >
-              Manter Conectado
+              <S.CheckBox
+                disabled={false}
+                value={toggleCheckBox}
+                onValueChange={setToggleCheckBox}
+                color="#56AB2F"
+                style={{
+                  borderTopColor: "#5B5B58",
+                  borderBottomColor: "#5B5B58",
+                  borderEndColor: "#5B5B58",
+                  borderStartColor: "#5B5B58",
+                  marginTop: -3,
+                }}
+              />
+              <Text
+                variant="Inter_500Medium"
+                color="GRAY"
+                fontSize={12}
+                marginLeft="sm"
+              >
+                Manter Conectado
+              </Text>
+            </S.CheckBoxContainer>
+
+            <TouchableOpacity>
+              <Text variant="Inter_500Medium" color="GRAY" fontSize={12}>
+                Esqueci minha senha
+              </Text>
+            </TouchableOpacity>
+          </S.Row>
+        </S.Form>
+
+        <S.Footer>
+          <Button
+            title="ENTRAR"
+            onPress={handleSubmit(handleSignIn)}
+            // activeLoad={islogin}
+          />
+
+          <Spacer height={20} />
+
+          <S.TextRow>
+            <Text variant="Inter_500Medium" color="GRAY">
+              Não tem uma conta?{" "}
             </Text>
-          </S.CheckBoxContainer>
-
-          <TouchableOpacity>
-            <Text variant="Inter_500Medium" color="GRAY" fontSize={12}>
-              Esqueci minha senha
-            </Text>
-          </TouchableOpacity>
-        </S.Row>
-      </S.Form>
-
-      <S.Footer>
-        <Button
-          title="ENTRAR"
-          onPress={handleSubmit(handleSignIn)}
-          // activeLoad={islogin}
-        />
-
-        <Spacer height={20} />
-
-        <S.TextRow>
-          <Text variant="Inter_500Medium" color="GRAY">
-            Não tem uma conta?{" "}
-          </Text>
-          <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
-            <Text variant="Inter_500Medium" color="PRIMARY">
-              Inscrever-se
-            </Text>
-          </TouchableOpacity>
-        </S.TextRow>
-      </S.Footer>
-    </S.Container>
+            <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
+              <Text variant="Inter_500Medium" color="PRIMARY">
+                Inscrever-se
+              </Text>
+            </TouchableOpacity>
+          </S.TextRow>
+        </S.Footer>
+      </S.Container>
+    </KeyboardAwareScrollView>
   );
 }

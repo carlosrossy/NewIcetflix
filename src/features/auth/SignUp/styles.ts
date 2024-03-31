@@ -1,11 +1,22 @@
 import styled from "styled-components/native";
 import Checkbox from "expo-checkbox";
 
+interface Itype {
+  top?: number;
+}
+
 export const Container = styled.View`
   flex: 1;
   background-color: ${({ theme }) => theme.colors.TERTIARY};
   padding: 0px 24px;
   justify-content: space-between;
+`;
+
+export const Header = styled.View<Itype>`
+  top: ${({ top }) => top};
+  /* padding: 0px 23px; */
+  flex-direction: row;
+  align-items: center;
 `;
 
 export const Form = styled.View``;
@@ -50,3 +61,27 @@ export const TextRow = styled.View`
 export const Footer = styled.View`
   margin-bottom: 40px;
 `;
+
+export const ContainerPhoto = styled.TouchableOpacity`
+  width: 170px;
+  height: 170px;
+  border: 1px solid ${({ theme }) => theme.colors.PRIMARY};
+  background-color: ${({ theme }) => theme.colors.SECONDARY};
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+`;
+
+export const Image = styled.Image.attrs({
+  resizeMode: "cover",
+})`
+  height: 170px;
+  width: 170px;
+  border-radius: 8px;
+`;
+
+export const View = styled.View`
+  align-items: center;
+  justify-content: center;
+`;
+
