@@ -10,6 +10,7 @@ import * as yup from "yup";
 import { Input } from "@global/components/Input";
 import { Spacer } from "@global/components/Spacer";
 import Text from "@global/components/Text";
+import Button from "@global/components/Button";
 
 const schema = yup.object().shape({
   email: yup.string().email("Email inválido").required("Email é obrigatório"),
@@ -67,53 +68,62 @@ export default function SignIn() {
             />
           )}
         />
+
+        <S.Row>
+          <S.CheckBoxContainer
+            onPress={() => setToggleCheckBox((oldValue: boolean) => !oldValue)}
+          >
+            <S.CheckBox
+              disabled={false}
+              value={toggleCheckBox}
+              onValueChange={setToggleCheckBox}
+              color="#56AB2F"
+              style={{
+                borderTopColor: "#5B5B58",
+                borderBottomColor: "#5B5B58",
+                borderEndColor: "#5B5B58",
+                borderStartColor: "#5B5B58",
+                marginTop: -3,
+              }}
+            />
+            <Text
+              variant="Inter_500Medium"
+              color="GRAY"
+              fontSize={12}
+              marginLeft="sm"
+            >
+              Manter Conectado
+            </Text>
+          </S.CheckBoxContainer>
+
+          <TouchableOpacity>
+            <Text variant="Inter_500Medium" color="GRAY" fontSize={12}>
+              Esqueci minha senha
+            </Text>
+          </TouchableOpacity>
+        </S.Row>
       </S.Form>
 
-      <S.Row>
-        <S.CheckBoxContainer
-          onPress={() => setToggleCheckBox((oldValue: boolean) => !oldValue)}
-        >
-          <S.CheckBox
-            disabled={false}
-            value={toggleCheckBox}
-            onValueChange={setToggleCheckBox}
-            color="#56AB2F"
-            style={{
-              borderTopColor: "#5B5B58",
-              borderBottomColor: "#5B5B58",
-              borderEndColor: "#5B5B58",
-              borderStartColor: "#5B5B58",
-              marginTop: -3,
-            }}
-          />
-          <Text
-            variant="Inter_500Medium"
-            color="GRAY"
-            fontSize={12}
-            marginLeft="sm"
-          >
-            Manter Conectado
-          </Text>
-        </S.CheckBoxContainer>
-
-        <TouchableOpacity>
-          <Text variant="Inter_500Medium" color="GRAY" fontSize={12}>
-            Esqueci minha senha
-          </Text>
-        </TouchableOpacity>
-      </S.Row>
-
-      {/* <S.ContainerButtons>
+      <S.Footer>
         <Button
           title="ENTRAR"
-          style={{
-            maxWidth: 340,
-            minWidth: 300,
-          }}
           //   onPress={handleSubmit(handleSingIn)}
           //   activeLoad={islogin}
         />
-      </S.ContainerButtons> */}
+
+        <Spacer height={20} />
+
+        <S.TextRow>
+          <Text variant="Inter_500Medium" color="GRAY">
+            Não tem uma conta?{" "}
+          </Text>
+          <TouchableOpacity>
+            <Text variant="Inter_500Medium" color="PRIMARY">
+              Inscrever-se
+            </Text>
+          </TouchableOpacity>
+        </S.TextRow>
+      </S.Footer>
     </S.Container>
   );
 }

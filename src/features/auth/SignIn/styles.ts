@@ -5,18 +5,14 @@ export const Container = styled.View`
   flex: 1;
   background-color: ${({ theme }) => theme.colors.TERTIARY};
   padding: 0px 24px;
+  justify-content: space-between;
 `;
 
-export const Form = styled.View`
-  /* width: 100%; */
-  align-items: center;
-  justify-content: center;
-  /* padding: 24px; */
-`;
+export const Form = styled.View``;
 
 export const ContainerButtons = styled.View`
   min-width: 300px;
-  max-width: 340px;
+  max-width: 100%;
   padding-left: 16px;
   padding-right: 16px;
   padding-top: 16px;
@@ -42,4 +38,15 @@ export const Row = styled.View`
   align-items: center;
   justify-content: space-between;
   margin-left: 5px;
+`;
+
+export const TextRow = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  /* margin-left: 5px; */
+`;
+
+export const Footer = styled.View`
+  margin-bottom: 40px;
 `;
