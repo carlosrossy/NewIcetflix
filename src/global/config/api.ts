@@ -5,7 +5,7 @@ export const API_TOKEN =
   "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0OGZkMmYxOGRhZTM2NTE2MjQyZWE5M2ZjMTVlN2Y1OCIsInN1YiI6IjY1YzI3YzZhYTMzNjEyMDBlNjUzYWU3OCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.bZDYOpVqpPtkzkBhaYYe1lImIIrP-EMhJaCUEx4gWrs";
 
 const api = axios.create({
-  baseURL: "https://api.themoviedb.org/3/movie",
+  baseURL: "https://api.themoviedb.org/3",
   params: {
     language: "pt-BR",
     api_key: API_KEY,

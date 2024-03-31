@@ -1,58 +1,159 @@
 import React from "react";
 import * as S from "./styles";
-
-import { Input } from "@global/components/Input";
-
-import { Controller, useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { ActivityIndicator, StatusBar } from "react-native";
+import {
+  ActivityIndicator,
+  FlatList,
+  ScrollView,
+  StatusBar,
+} from "react-native";
 import Text from "@global/components/Text";
-
-import { FontAwesome } from "@expo/vector-icons";
-import { FontAwesome5 } from "@expo/vector-icons";
+import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 import { Spacer } from "@global/components/Spacer";
 import { useQuery } from "@tanstack/react-query";
 import { getPopularMovies } from "@global/config/getPopularMovies";
+import { getNowPlayingMovies } from "@global/config/getNowPlayingMovies";
+import { MovieItem } from "@global/components/Movie";
+import { getTopRated } from "@global/config/getTopRated";
+import { getPopularSeries } from "@global/config/getPopularSeries";
 
 export default function Home() {
-  const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['PopularMovies'],
+  const {
+    data: popularMovies,
+    isLoading: isLoadingPopularMovies,
+    isError: isErrorPopularMovies,
+    error: errorPopularMovies,
+  } = useQuery({
+    queryKey: ["PopularMovies"],
     queryFn: getPopularMovies,
   });
 
-  console.log(data);
+  const {
+    data: nowPlayingMovies,
+    isLoading: isLoadingNowPlayingMovies,
+    isError: isErrorNowPlayingMovies,
+    error: errorNowPlayingMovies,
+  } = useQuery({
+    queryKey: ["NowPlaying"],
+    queryFn: getNowPlayingMovies,
+  });
+
+  const {
+    data: topRatedMovies,
+    isLoading: isLoadingTopRatedMovies,
+    isError: isErrorTopRatedMovies,
+    error: errorTopRatedMovies,
+  } = useQuery({
+    queryKey: ["TopRated"],
+    queryFn: getTopRated,
+  });
+
+  const {
+    data: popularSeries,
+    isLoading: isLoadingPopularSeries,
+    isError: isErrorPopularSeries,
+    error: errorPopularSeries,
+  } = useQuery({
+    queryKey: ["popularSeries"],
+    queryFn: getPopularSeries,
+  });
 
   return (
-    <S.Container>
-      <StatusBar barStyle="default" backgroundColor={"#121011"} />
-      <S.Header>
-        <S.Info>
-          <Text variant="Inter_600SemiBold" color="WHITE" fontSize={16}>
-            Olá, Carlos
-          </Text>
-        </S.Info>
+    <ScrollView style={{ flex: 1 }}>
+      <S.Container>
+        <StatusBar barStyle="default" backgroundColor={"#121011"} />
+        <S.Header>
+          <S.Info>
+            <Text variant="Inter_600SemiBold" color="WHITE" fontSize={16}>
+              Olá, Carlos
+            </Text>
+          </S.Info>
 
-        <S.Buttons>
-          <S.Button>
-            <FontAwesome name="search" size={24} color="#FFFF" />
-          </S.Button>
+          <S.Buttons>
+            <S.Button>
+              <FontAwesome name="search" size={24} color="#FFFF" />
+            </S.Button>
 
-          <Spacer width={13} />
+            <Spacer width={13} />
 
-          <S.Button>
-            <FontAwesome5 name="user" size={24} color="#FFFF" />
-          </S.Button>
-        </S.Buttons>
-      </S.Header>
+            <S.Button>
+              <FontAwesome5 name="user" size={24} color="#FFFF" />
+            </S.Button>
+          </S.Buttons>
+        </S.Header>
 
-      {isLoading ? (
-        <ActivityIndicator size="large" color="#0000ff" />
-      ) : (
-        <Text variant="Inter_600SemiBold" fontSize={16} color="WHITE">
-          Popular
-        </Text>
-      )}
-    </S.Container>
+        {isLoadingPopularMovies ||
+        isLoadingNowPlayingMovies ||
+        isLoadingTopRatedMovies ||
+        isLoadingPopularSeries ? (
+          <ActivityIndicator size="large" color="#Ffff" />
+        ) : (
+          <>
+            <Spacer height={20} />
+
+            <Text variant="Inter_600SemiBold" fontSize={16} color="WHITE">
+              Lançamentos no brasil
+            </Text>
+            <Spacer height={15} />
+            <FlatList
+              data={nowPlayingMovies}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              renderItem={({ item }) => (
+                <MovieItem movie={item} onPress={(id) => console.log(id)} />
+              )}
+              keyExtractor={(item) => item.id.toString()}
+            />
+
+            <Spacer height={10} />
+
+            <Text variant="Inter_600SemiBold" fontSize={16} color="WHITE">
+              Filmes mais bem avaliados
+            </Text>
+            <Spacer height={15} />
+            <FlatList
+              data={topRatedMovies}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              renderItem={({ item }) => (
+                <MovieItem movie={item} onPress={(id) => console.log(id)} />
+              )}
+              keyExtractor={(item) => item.id.toString()}
+            />
+
+            <Spacer height={10} />
+
+            <Text variant="Inter_600SemiBold" fontSize={16} color="WHITE">
+              Filmes Populares
+            </Text>
+            <Spacer height={15} />
+            <FlatList
+              data={popularMovies}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              renderItem={({ item }) => (
+                <MovieItem movie={item} onPress={(id) => console.log(id)} />
+              )}
+              keyExtractor={(item) => item.id.toString()}
+            />
+
+            <Spacer height={10} />
+
+            <Text variant="Inter_600SemiBold" fontSize={16} color="WHITE">
+              Serie Pouplares
+            </Text>
+            <Spacer height={15} />
+            <FlatList
+              data={popularSeries}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              renderItem={({ item }) => (
+                <MovieItem movie={item} onPress={(id) => console.log(id)} />
+              )}
+              keyExtractor={(item) => item.id.toString()}
+            />
+          </>
+        )}
+      </S.Container>
+    </ScrollView>
   );
 }
