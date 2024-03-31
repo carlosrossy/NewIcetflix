@@ -12,6 +12,7 @@ import firestore from "@react-native-firebase/firestore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { AuthScreenNavigationProp } from "../routes/auth.routes";
+import Toast from "react-native-toast-message";
 
 type User = {
   id: string;
@@ -96,9 +97,17 @@ function AuthProvider({ children }: AuthProviderProps) {
         code === "auth/wrong-password" ||
         code === "auth/invalid-credential"
       ) {
-        Alert.alert("Login", "E-mail e/ou senha inválida.");
+        Toast.show({
+          type: "error",
+          text1: "Login",
+          text2: "E-mail e/ou senha inválida.",
+        });
       } else {
-        Alert.alert("Login", "Não foi possível realizar o Login.");
+        Toast.show({
+          type: "error",
+          text1: "Login",
+          text2: "Não foi possível realizar o Login.",
+        });
       }
     } finally {
       setIsLogin(false);
@@ -128,25 +137,32 @@ function AuthProvider({ children }: AuthProviderProps) {
 
       setIsLoading(false);
 
-      Alert.alert("Sucesso", "Seu perfil foi criado com sucesso.", [
-        {
-          text: "OK",
-          onPress: () => {
-            navigation.navigate("SignIn");
-          },
+      Toast.show({
+        type: "success",
+        text1: "Sucesso",
+        text2: "Seu perfil foi criado com sucesso.",
+        visibilityTime: 3000,
+        autoHide: true,
+        onHide: () => {
+          navigation.navigate("SignIn");
         },
-      ]);
+      });
     } catch (error: any) {
       setIsLoading(false);
       console.error("Erro ao criar conta:", error);
 
       if (error.code === "auth/email-already-in-use") {
-        Alert.alert(
-          "Erro ao criar conta",
-          "O endereço de e-mail já está sendo usado por outra conta."
-        );
+        Toast.show({
+          type: "error",
+          text1: "Erro ao criar conta",
+          text2: "O endereço de e-mail já está sendo usado por outra conta.",
+        });
       } else {
-        Alert.alert("Erro ao criar conta", "Ocorreu um erro ao criar a conta.");
+        Toast.show({
+          type: "error",
+          text1: "Erro ao criar conta",
+          text2: "Ocorreu um erro ao criar a conta.",
+        });
       }
       throw error;
     }
@@ -173,24 +189,34 @@ function AuthProvider({ children }: AuthProviderProps) {
   }
 
   async function forgotPassword(email: string) {
-    if (!email) {
-      return Alert.alert("Redefinir senha", "Informe o e-mail.");
+    try {
+      const userSnapshot = await firestore()
+        .collection("users")
+        .where("email", "==", email)
+        .get();
+      if (userSnapshot.empty) {
+        Toast.show({
+          type: "error",
+          text1: "Redefinir Senha",
+          text2:
+            "O e-mail fornecido não está associado a uma conta. Por favor, verifique o e-mail e tente novamente.",
+        });
+        return;
+      }
+      await auth().sendPasswordResetEmail(email);
+      Toast.show({
+        type: "success",
+        text1: "Redefinir Senha",
+        text2: "Enviamos um link no seu e-mail para redefinir sua senha.",
+      });
+    } catch (error) {
+      Toast.show({
+        type: "error",
+        text1: "Redefinir Senha",
+        text2:
+          "Não foi possível enviar o e-mail para redefinir sua senha. Por favor, tente novamente mais tarde.",
+      });
     }
-
-    auth()
-      .sendPasswordResetEmail(email)
-      .then(() =>
-        Alert.alert(
-          "Redefinir Senha",
-          "Enviamos um link no seu e-mail para redefinir sua senha."
-        )
-      )
-      .catch(() =>
-        Alert.alert(
-          "Redefinir Senha",
-          "Não foi possível enviar o e-mail para redefinir sua senha."
-        )
-      );
   }
 
   useEffect(() => {

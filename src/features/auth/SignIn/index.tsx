@@ -16,6 +16,8 @@ import { useNavigation } from "@react-navigation/native";
 import { AuthScreenNavigationProp } from "@global/routes/auth.routes";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
+import Logo from "@assets/Logo.svg";
+
 const schema = yup.object().shape({
   email: yup.string().email("Email inválido").required("Email é obrigatório"),
   password: yup.string().required("Senha é obrigatório"),
@@ -53,6 +55,10 @@ export default function SignIn() {
         <StatusBar barStyle="default" backgroundColor={"#121011"} />
 
         <S.Form>
+          <S.Logo>
+            <Logo />
+          </S.Logo>
+
           <Controller
             control={control}
             name="email"
@@ -120,7 +126,7 @@ export default function SignIn() {
               </Text>
             </S.CheckBoxContainer>
 
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('RecoverPassword')}>
               <Text variant="Inter_500Medium" color="GRAY" fontSize={12}>
                 Esqueci minha senha
               </Text>

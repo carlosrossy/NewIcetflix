@@ -1,11 +1,14 @@
 import styled from "styled-components/native";
-import Checkbox from "expo-checkbox";
+
+interface Itype {
+  top?: number;
+}
 
 export const Container = styled.View`
   flex: 1;
   background-color: ${({ theme }) => theme.colors.TERTIARY};
   padding: 0px 24px;
-  justify-content: space-between;
+  /* justify-content: space-between; */
 `;
 
 export const Form = styled.View``;
@@ -18,19 +21,6 @@ export const ContainerButtons = styled.View`
   padding-top: 16px;
   align-self: center;
   align-items: center;
-`;
-
-export const CheckBoxContainer = styled.TouchableOpacity`
-  display: flex;
-  align-items: center;
-  flex-direction: row;
-  justify-content: center;
-`;
-
-export const CheckBox = styled(Checkbox)`
-  width: 16px;
-  height: 16px;
-  border: #5b5b58;
 `;
 
 export const Row = styled.View`
@@ -54,6 +44,13 @@ export const Footer = styled.View`
 export const Logo = styled.View`
   align-items: center;
   justify-content: center;
-  margin-top: 30px;
-  margin-bottom: 30px;
+  margin-top: 60px;
+  margin-bottom: 60px;
+`;
+
+export const Header = styled.View<Itype>`
+  top: ${({ top }) => top};
+  /* padding: 0px 23px; */
+  flex-direction: row;
+  align-items: center;
 `;

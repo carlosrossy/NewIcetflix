@@ -19,6 +19,7 @@ import { ThemeProvider } from "styled-components";
 import SignIn from "@features/auth/SignIn";
 import { AppProvider } from "@global/context";
 import Routes from "@global/routes";
+import Toast from "react-native-toast-message";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -45,6 +46,7 @@ export default function App() {
     <AppProvider>
       <QueryClientProvider client={queryClient}>
         <Routes />
+        <Toast />
       </QueryClientProvider>
     </AppProvider>
   );
