@@ -1,4 +1,4 @@
-import Details from "@features/Details";
+import Details from "@features/screens/Details";
 import Home from "@features/screens/Home";
 import {
   NativeStackNavigationProp,

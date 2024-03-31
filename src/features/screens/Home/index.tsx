@@ -15,8 +15,10 @@ import { getNowPlayingMovies } from "@global/config/getNowPlayingMovies";
 import { MovieItem } from "@global/components/Movie";
 import { getTopRated } from "@global/config/getTopRated";
 import { getPopularSeries } from "@global/config/getPopularSeries";
+import { useAuth } from "@global/context/auth";
 
 export default function Home() {
+  const {User} = useAuth();
   const {
     data: popularMovies,
     isLoading: isLoadingPopularMovies,
@@ -64,7 +66,7 @@ export default function Home() {
         <S.Header>
           <S.Info>
             <Text variant="Inter_600SemiBold" color="WHITE" fontSize={16}>
-              Olá, Carlos
+              Olá, {User?.name}
             </Text>
           </S.Info>
 
