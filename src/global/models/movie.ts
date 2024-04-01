@@ -153,3 +153,85 @@ export interface SeriesDetails {
   vote_average: number;
   vote_count: number;
 }
+
+export interface Cast {
+  adult: boolean;
+  gender: number | null;
+  id: number;
+  known_for_department: string;
+  name: string;
+  original_name: string;
+  popularity: number;
+  profile_path: string | null;
+  character: string;
+  credit_id: string;
+  order: number;
+}
+
+export interface Crew {
+  adult: boolean;
+  gender: number | null;
+  id: number;
+  known_for_department: string;
+  name: string;
+  original_name: string;
+  popularity: number;
+  profile_path: string | null;
+  credit_id: string;
+  department: string;
+  job: string;
+}
+
+export interface MovieCredits {
+  id: number;
+  cast: Cast[];
+  crew: Crew[];
+}
+
+export interface WatchDetailsResponse {
+  id: number;
+  results: {
+    [countryCode: string]: {
+      link: string;
+      flatrate: {
+        logo_path: string;
+        provider_id: number;
+        provider_name: string;
+        display_priority: number;
+      }[];
+    };
+  };
+}
+
+export interface WatchMovie {
+  id: number;
+  results: {
+    [countryCode: string]: {
+      link: string;
+      flatrate: {
+        logo_path: string;
+        provider_id: number;
+        provider_name: string;
+        display_priority: number;
+      }[];
+    };
+  };
+}
+
+interface VideoResult {
+  iso_639_1: string;
+  iso_3166_1: string;
+  name: string;
+  key: string;
+  site: string;
+  size: number;
+  type: string;
+  official: boolean;
+  published_at: string;
+  id: string;
+}
+
+interface MovieVideos {
+  id: number;
+  results: VideoResult[];
+}

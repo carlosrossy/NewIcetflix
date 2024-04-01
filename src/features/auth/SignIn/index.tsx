@@ -138,7 +138,7 @@ export default function SignIn() {
           <Button
             title="ENTRAR"
             onPress={handleSubmit(handleSignIn)}
-            // activeLoad={islogin}
+            activeLoad={islogin}
           />
 
           <Spacer height={20} />

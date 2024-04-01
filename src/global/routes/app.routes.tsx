@@ -9,7 +9,7 @@ const Stack = createNativeStackNavigator();
 
 export type RootAppRoutesList = {
   Home: undefined;
-  Details: undefined;
+  Details: { id: number };
 };
 
 export type AppScreenNavigationProp =

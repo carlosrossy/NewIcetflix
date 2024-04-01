@@ -16,9 +16,12 @@ import { MovieItem } from "@global/components/Movie";
 import { getTopRated } from "@global/config/getTopRated";
 import { getPopularSeries } from "@global/config/getPopularSeries";
 import { useAuth } from "@global/context/auth";
+import { AppScreenNavigationProp } from "@global/routes/app.routes";
+import { useNavigation } from "@react-navigation/native";
 
 export default function Home() {
-  const {User} = useAuth();
+  const navigation = useNavigation<AppScreenNavigationProp>();
+  const { User } = useAuth();
   const {
     data: popularMovies,
     isLoading: isLoadingPopularMovies,
@@ -58,6 +61,10 @@ export default function Home() {
     queryKey: ["popularSeries"],
     queryFn: getPopularSeries,
   });
+
+  const navigateToMovieDetails = (id: number) => {
+    navigation.navigate("Details", { id: id });
+  };
 
   return (
     <ScrollView style={{ flex: 1 }}>
@@ -101,7 +108,10 @@ export default function Home() {
               horizontal
               showsHorizontalScrollIndicator={false}
               renderItem={({ item }) => (
-                <MovieItem movie={item} onPress={(id) => console.log(id)} />
+                <MovieItem
+                  movie={item}
+                  onPress={() => navigateToMovieDetails(item.id)}
+                />
               )}
               keyExtractor={(item) => item.id.toString()}
             />
@@ -117,7 +127,10 @@ export default function Home() {
               horizontal
               showsHorizontalScrollIndicator={false}
               renderItem={({ item }) => (
-                <MovieItem movie={item} onPress={(id) => console.log(id)} />
+                <MovieItem
+                  movie={item}
+                  onPress={() => navigateToMovieDetails(item.id)}
+                />
               )}
               keyExtractor={(item) => item.id.toString()}
             />
@@ -133,7 +146,10 @@ export default function Home() {
               horizontal
               showsHorizontalScrollIndicator={false}
               renderItem={({ item }) => (
-                <MovieItem movie={item} onPress={(id) => console.log(id)} />
+                <MovieItem
+                  movie={item}
+                  onPress={() => navigateToMovieDetails(item.id)}
+                />
               )}
               keyExtractor={(item) => item.id.toString()}
             />
@@ -149,7 +165,10 @@ export default function Home() {
               horizontal
               showsHorizontalScrollIndicator={false}
               renderItem={({ item }) => (
-                <MovieItem movie={item} onPress={(id) => console.log(id)} />
+                <MovieItem
+                  movie={item}
+                  onPress={() => navigateToMovieDetails(item.id)}
+                />
               )}
               keyExtractor={(item) => item.id.toString()}
             />
