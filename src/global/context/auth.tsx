@@ -39,6 +39,11 @@ type AuthContextData = {
     newPassword: string,
     currentPassword: string
   ) => Promise<void>;
+  updateUser: (
+    userId: string,
+    newName: string,
+    newImageUrl: string
+  ) => Promise<void>;
   islogin: boolean;
   isLoading: boolean;
   User: User | null;
@@ -179,7 +184,6 @@ function AuthProvider({ children }: AuthProviderProps) {
 
     if (storedUser) {
       const userData = JSON.parse(storedUser) as User;
-      console.log(userData);
       setUser(userData);
     }
 
@@ -229,7 +233,6 @@ function AuthProvider({ children }: AuthProviderProps) {
       const user = auth().currentUser;
 
       if (user) {
-        // Reautenticar o usuário
         const credentials = auth.EmailAuthProvider.credential(
           user?.email!,
           currentPassword
@@ -260,6 +263,45 @@ function AuthProvider({ children }: AuthProviderProps) {
     }
   }
 
+  async function updateUser(
+    userId: string,
+    newName: string,
+    newImageUrl: string
+  ) {
+    try {
+      setIsLoading(true);
+  
+      await firestore().collection("users").doc(userId).update({
+        name: newName,
+        imageUrl: newImageUrl,
+      });
+  
+      setUser((prevUser: User | null) => ({
+        ...prevUser!,
+        name: newName,
+        imageUrl: newImageUrl,
+      }));
+  
+      await loadUserStorageData();
+  
+      Toast.show({
+        type: "success",
+        text1: "Dados Atualizados",
+        text2: "Seu nome e imagem de perfil foram atualizados com sucesso.",
+      });
+    } catch (error) {
+      console.error("Erro ao atualizar os dados do usuário:", error);
+      Toast.show({
+        type: "error",
+        text1: "Erro ao atualizar os dados",
+        text2:
+          "Ocorreu um erro ao atualizar seus dados. Por favor, tente novamente mais tarde.",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   useEffect(() => {
     loadUserStorageData();
   }, []);
@@ -275,6 +317,7 @@ function AuthProvider({ children }: AuthProviderProps) {
         SingOut,
         forgotPassword,
         updatePassword,
+        updateUser,
       }}
     >
       {children}

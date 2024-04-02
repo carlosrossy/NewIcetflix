@@ -56,7 +56,7 @@ export default function Menu() {
           <Ionicons name="chevron-forward" size={24} color="#FFFF" />
         </S.OptionButton>
 
-        <S.OptionButton>
+        <S.OptionButton onPress={() => navigation.navigate('UpdateProfile')}>
           <S.Row>
             <FontAwesome5 name="user-edit" size={24} color="#FFFF" />
             <Text

@@ -2,6 +2,7 @@ import Details from "@features/screens/Details";
 import Home from "@features/screens/Home";
 import Menu from "@features/screens/Menu";
 import UpdatePassword from "@features/screens/UpdatePassword";
+import UpdateProfile from "@features/screens/UpdateProfile";
 import {
   NativeStackNavigationProp,
   createNativeStackNavigator,
@@ -14,6 +15,7 @@ export type RootAppRoutesList = {
   Details: { id: number };
   Menu: undefined;
   UpdatePassword: undefined;
+  UpdateProfile: undefined;
 };
 
 export type AppScreenNavigationProp =
@@ -33,6 +35,8 @@ export function AppRoutes() {
       <Stack.Screen name="Menu" component={Menu} />
 
       <Stack.Screen name="UpdatePassword" component={UpdatePassword} />
+
+      <Stack.Screen name="UpdateProfile" component={UpdateProfile} />
     </Stack.Navigator>
   );
 }
