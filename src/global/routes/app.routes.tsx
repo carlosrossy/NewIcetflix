@@ -1,5 +1,6 @@
 import Details from "@features/screens/Details";
 import Home from "@features/screens/Home";
+import Menu from "@features/screens/Menu";
 import {
   NativeStackNavigationProp,
   createNativeStackNavigator,
@@ -10,6 +11,7 @@ const Stack = createNativeStackNavigator();
 export type RootAppRoutesList = {
   Home: undefined;
   Details: { id: number };
+  Menu: undefined;
 };
 
 export type AppScreenNavigationProp =
@@ -25,6 +27,8 @@ export function AppRoutes() {
       <Stack.Screen name="Home" component={Home} />
 
       <Stack.Screen name="Details" component={Details} />
+
+      <Stack.Screen name="Menu" component={Menu} />
     </Stack.Navigator>
   );
 }

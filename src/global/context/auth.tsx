@@ -35,6 +35,7 @@ type AuthContextData = {
   ) => Promise<void>;
   SingOut: () => Promise<void>;
   forgotPassword: (email: string) => Promise<void>;
+  updatePassword: (newPassword: string) => Promise<void>; // Adicionando a função de atualização de senha
   islogin: boolean;
   isLoading: boolean;
   User: User | null;
@@ -219,6 +220,30 @@ function AuthProvider({ children }: AuthProviderProps) {
     }
   }
 
+  async function updatePassword(newPassword: string) {
+    try {
+      setIsLoading(true);
+      const user = auth().currentUser;
+      await user?.updatePassword(newPassword);
+      setIsLoading(false);
+      Toast.show({
+        type: "success",
+        text1: "Senha Atualizada",
+        text2: "Sua senha foi atualizada com sucesso.",
+      });
+    } catch (error: any) {
+      setIsLoading(false);
+      console.error("Erro ao atualizar a senha:", error);
+      Toast.show({
+        type: "error",
+        text1: "Erro ao atualizar a senha",
+        text2:
+          "Ocorreu um erro ao atualizar sua senha. Por favor, tente novamente mais tarde.",
+      });
+      throw error;
+    }
+  }
+
   useEffect(() => {
     loadUserStorageData();
   }, []);
@@ -233,6 +258,7 @@ function AuthProvider({ children }: AuthProviderProps) {
         islogin,
         SingOut,
         forgotPassword,
+        updatePassword,
       }}
     >
       {children}
@@ -242,7 +268,6 @@ function AuthProvider({ children }: AuthProviderProps) {
 
 function useAuth() {
   const context = useContext(AuthContext);
-
   return context;
 }
 

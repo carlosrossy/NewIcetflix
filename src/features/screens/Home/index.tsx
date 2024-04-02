@@ -75,9 +75,11 @@ export default function Home() {
             <Spacer width={13} />
 
             {User?.imageUrl ? (
-              <S.UserImage source={{ uri: User?.imageUrl }} />
+              <S.Button onPress={() => navigation.navigate("Menu")}>
+                <S.UserImage source={{ uri: User?.imageUrl }} />
+              </S.Button>
             ) : (
-              <S.Button>
+              <S.Button onPress={() => navigation.navigate("Menu")}>
                 <FontAwesome5 name="user" size={24} color="#FFFF" />
               </S.Button>
             )}
