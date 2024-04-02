@@ -46,14 +46,14 @@ export async function getVideo(movieId: number): Promise<WatchMovie> {
   }
 }
 
-export async function getSeriesDetails(
-  seriesId: number
-): Promise<SeriesDetails> {
-  try {
-    const { data } = await api.get<SeriesDetails>(`/tv/${seriesId}`);
-    return data;
-  } catch (error) {
-    console.error("Error fetching series details:", error);
-    throw error;
-  }
-}
+// export async function getSeriesDetails(
+//   seriesId: number
+// ): Promise<SeriesDetails> {
+//   try {
+//     const { data } = await api.get<SeriesDetails>(`/tv/${seriesId}`);
+//     return data;
+//   } catch (error) {
+//     console.error("Error fetching series details:", error);
+//     throw error;
+//   }
+// }

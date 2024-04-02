@@ -52,22 +52,12 @@ export default function Home() {
     queryFn: getTopRated,
   });
 
-  const {
-    data: popularSeries,
-    isLoading: isLoadingPopularSeries,
-    isError: isErrorPopularSeries,
-    error: errorPopularSeries,
-  } = useQuery({
-    queryKey: ["popularSeries"],
-    queryFn: getPopularSeries,
-  });
-
   const navigateToMovieDetails = (id: number) => {
     navigation.navigate("Details", { id: id });
   };
 
   return (
-    <ScrollView style={{ flex: 1 }}>
+    <ScrollView style={{ flex: 1, backgroundColor: "#121011" }}>
       <S.Container>
         <StatusBar barStyle="default" backgroundColor={"#121011"} />
         <S.Header>
@@ -92,8 +82,7 @@ export default function Home() {
 
         {isLoadingPopularMovies ||
         isLoadingNowPlayingMovies ||
-        isLoadingTopRatedMovies ||
-        isLoadingPopularSeries ? (
+        isLoadingTopRatedMovies ? (
           <ActivityIndicator size="large" color="#Ffff" />
         ) : (
           <>
@@ -143,25 +132,6 @@ export default function Home() {
             <Spacer height={15} />
             <FlatList
               data={popularMovies}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              renderItem={({ item }) => (
-                <MovieItem
-                  movie={item}
-                  onPress={() => navigateToMovieDetails(item.id)}
-                />
-              )}
-              keyExtractor={(item) => item.id.toString()}
-            />
-
-            <Spacer height={10} />
-
-            <Text variant="Inter_600SemiBold" fontSize={16} color="WHITE">
-              Serie Pouplares
-            </Text>
-            <Spacer height={15} />
-            <FlatList
-              data={popularSeries}
               horizontal
               showsHorizontalScrollIndicator={false}
               renderItem={({ item }) => (

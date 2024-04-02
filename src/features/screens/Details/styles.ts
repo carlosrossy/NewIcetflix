@@ -3,27 +3,21 @@ import styled from "styled-components/native";
 export const Container = styled.View`
   flex: 1;
   background-color: ${({ theme }) => theme.colors.TERTIARY};
-  /* padding: 0px 24px; */
 `;
 
 export const MovieImage = styled.Image`
   width: 100%;
-  height: 600px;
+  height: 450px;
   border-radius: 6px;
   margin-right: 10px;
-  border-bottom-left-radius: 40px;
-  border-bottom-right-radius: 40px;
 `;
 
 export const Details = styled.View`
-  position: absolute;
-  top: 50%;
-  left: 24px;
-  right: 24px;
   background-color: ${({ theme }) => theme.colors.SECONDARY};
-  border-radius: 48px;
-  margin-top: -270px;
+  /* border-radius: 48px; */
+  margin-top: -170px;
   padding: 26px 20px;
+  margin-bottom: 20px;
 `;
 
 export const Buttons = styled.View`
@@ -66,8 +60,31 @@ export const ButtonTeaser = styled.TouchableOpacity`
   align-items: center;
   justify-content: center;
   background-color: #1F1F1F;
-  padding: 8px 12px; 
+  padding: 8px 22px; 
   flex-direction: row;
-  width: 180px;
   border-radius: 50px;
+`;
+
+export const Info = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+export const Star = styled.View`
+  flex-direction: row;
+  align-items: center;
+  background-color: white;
+  padding: 5px 10px;
+  justify-content: center;
+  border-radius: 20px;
+`;
+
+export const Genre = styled.View`
+  flex-direction: row;
+  align-items: center;
+  background-color: white;
+  padding: 5px 10px;
+  justify-content: center;
+  border-radius: 20px;
 `;

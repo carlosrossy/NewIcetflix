@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import * as S from "./styles";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import {
@@ -24,6 +24,8 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import { AppScreenNavigationProp } from "@global/routes/app.routes";
+import Toast from "react-native-toast-message";
+import { CardCast } from "@global/components/CardCast";
 
 interface IParamsRoutes {
   id: number;
@@ -33,13 +35,18 @@ export default function Details() {
   const navigation = useNavigation<AppScreenNavigationProp>();
   const route = useRoute();
   const { id } = route.params as IParamsRoutes;
+  const [isLiked, setIsLiked] = useState(false);
+
+  const handleHeartClick = () => {
+    setIsLiked(!isLiked);
+  };
 
   const {
     data: movieDetails,
     isLoading: isLoadingMovie,
     isError: isErrorMovie,
   } = useQuery({
-    queryKey: ["movieDetails"],
+    queryKey: [`movieDetails_${id}`],
     queryFn: () => getMovieDetails(id),
   });
 
@@ -48,7 +55,7 @@ export default function Details() {
     isLoading: isLoadingCredits,
     isError: isErrorCredits,
   } = useQuery({
-    queryKey: ["movieCredits"],
+    queryKey: [`movieCredits_${id}`],
     queryFn: () => getCreditDetails(id),
   });
 
@@ -57,7 +64,7 @@ export default function Details() {
     isLoading: isLoadingWatch,
     isError: isErrorWatch,
   } = useQuery({
-    queryKey: ["movieWatch"],
+    queryKey: [`movieWatch_${id}`],
     queryFn: () => getWatchDetails(id),
   });
 
@@ -66,10 +73,9 @@ export default function Details() {
     isLoading: isLoadingvideos,
     isError: isErrorvideos,
   } = useQuery({
-    queryKey: ["movieVideos"],
+    queryKey: [`movieVideos_${id}`],
     queryFn: () => getVideo(id),
   });
-
   if (isErrorMovie || isErrorCredits || isErrorWatch) {
     return (
       <Text variant="Inter_400Regular" color="WHITE">
@@ -79,6 +85,15 @@ export default function Details() {
   }
 
   const flatrateProviders = watchDetails?.results?.BR?.flatrate;
+
+  const showTrailerToast = () => {
+    Toast.show({
+      type: "info",
+      text1: "Trailer não disponível",
+      text2: "Não há trailer disponível para este filme.",
+      visibilityTime: 3000,
+    });
+  };
 
   const handlePress = () => {
     let videoKey;
@@ -96,154 +111,212 @@ export default function Details() {
     if (videoKey) {
       const youtubeUrl = `https://www.youtube.com/watch?v=${videoKey}`;
       Linking.openURL(youtubeUrl);
+    } else {
+      showTrailerToast();
     }
   };
 
   return (
-    <S.Container>
-      {isLoadingMovie ||
-      isLoadingCredits ||
-      isLoadingWatch ||
-      isLoadingvideos ? (
-        <ActivityIndicator size="large" color="#Ffff" />
-      ) : (
-        <>
-          <S.MovieImage
-            source={{
-              uri: `https://image.tmdb.org/t/p/original/${movieDetails?.poster_path}`,
-            }}
-          />
+    <ScrollView style={{ flex: 1, backgroundColor: "#121011" }}>
+      <S.Container>
+        {isLoadingMovie ||
+        isLoadingCredits ||
+        isLoadingWatch ||
+        isLoadingvideos ? (
+          <View
+            style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+          >
+            <ActivityIndicator size="large" color="#Ffff" />
+          </View>
+        ) : (
+          <>
+            <S.MovieImage
+              source={{
+                uri: `https://image.tmdb.org/t/p/original/${movieDetails?.backdrop_path}`,
+              }}
+            />
 
-          <S.Buttons>
-            <S.Button onPress={navigation.goBack}>
-              <Ionicons name="chevron-back" size={24} color="#FFFF" />
-            </S.Button>
-
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <S.Button
-                onPress={() => handlePress(videosDetails?.results[0]?.key)}
-              >
-                <FontAwesome5 name="play" size={20} color="#FFFF" />
+            <S.Buttons>
+              <S.Button onPress={navigation.goBack}>
+                <Ionicons name="chevron-back" size={24} color="#FFFF" />
               </S.Button>
-              <Spacer width={10} />
-              <S.Button>
-                <FontAwesome name="heart-o" size={24} color="#FFFF" />
-              </S.Button>
-            </View>
-          </S.Buttons>
 
-          <S.Details>
-            <Text variant="Inter_600SemiBold" color="WHITE" fontSize={14}>
-              {movieDetails?.title}{" "}
-              {movieDetails?.release_date &&
-                `(${new Date(movieDetails.release_date).getFullYear()})`}
-            </Text>
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <S.Button onPress={handleHeartClick}>
+                <FontAwesome name={isLiked ? "heart" : "heart-o"} size={24} color={isLiked ? "#56AB2F" : "#FFFF"} />
+                </S.Button>
+              </View>
+            </S.Buttons>
 
-            <Text variant="Inter_400Regular" color="WHITE">
-              Lançamento:{" "}
-              {movieDetails?.release_date.split("-").reverse().join("/")}
-            </Text>
+            <S.Details>
+              <Text variant="Inter_600SemiBold" color="WHITE" fontSize={18}>
+                {movieDetails?.title}{" "}
+                {movieDetails?.release_date &&
+                  `(${new Date(movieDetails.release_date).getFullYear()})`}
+              </Text>
 
-            <Spacer height={8} />
+              <Spacer height={8} />
 
-            <Text variant="Inter_400Regular" color="WHITE">
-              Duração: {Math.floor(movieDetails?.runtime! / 60)}h{""}
-              {movieDetails?.runtime! % 60}min
-            </Text>
+              <S.Info>
+                <S.Row>
+                  <S.Star>
+                    <FontAwesome name="star" size={16} color="#41403E" />
 
-            <Spacer height={8} />
+                    <Spacer width={5} />
 
-            <Spacer height={8} />
-
-            <Text variant="Inter_400Regular" color="WHITE">
-              Classificação: {Number(movieDetails?.vote_average).toFixed(1)}
-            </Text>
-
-            <Spacer height={8} />
-
-            <Text variant="Inter_400Regular" color="WHITE">
-              Gêneros:{" "}
-              {movieDetails?.genres.map((genre) => genre.name).join(", ")}
-            </Text>
-
-            <Spacer height={8} />
-            <Text variant="Inter_400Regular" color="WHITE" textAlign="justify">
-              Sinopse: {movieDetails?.overview}
-            </Text>
-            <Spacer height={8} />
-            <Text variant="Inter_400Regular" color="WHITE">
-              Elenco:
-            </Text>
-            <Spacer height={10} />
-            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-              {creditsDetails?.cast.map((actor) => (
-                <S.ActorContainer key={actor.id}>
-                  <S.CastImage
-                    source={{
-                      uri: `https://image.tmdb.org/t/p/original/${actor.profile_path}`,
-                    }}
-                  />
-                  <Text
-                    variant="Inter_400Regular"
-                    color="WHITE"
-                    fontSize={12}
-                    textAlign="center"
-                    textAlignVertical="center"
-                    numberOfLines={2}
-                  >
-                    {actor.name.length > 12
-                      ? actor.name.replace(" ", "\n")
-                      : actor.name}
-                  </Text>
-                  <Text
-                    variant="Inter_400Regular"
-                    color="WHITE"
-                    fontSize={10}
-                    textAlign="center"
-                    textAlignVertical="center"
-                  >
-                    {actor.character.length > 18
-                      ? actor.character.replace(" ", "\n")
-                      : actor.character}
-                  </Text>
-                </S.ActorContainer>
-              ))}
-            </ScrollView>
-            <Spacer height={8} />
-            <Text variant="Inter_400Regular" color="WHITE">
-              Onde assistir:
-            </Text>
-
-            <Spacer height={10} />
-
-            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-              {flatrateProviders && flatrateProviders.length > 0 ? (
-                flatrateProviders.map((provider) => (
-                  <S.ActorContainer key={provider.provider_id}>
-                    <S.CastImage
-                      source={{
-                        uri: `https://image.tmdb.org/t/p/original/${provider.logo_path}`,
-                      }}
-                    />
-                    <Text
-                      variant="Inter_400Regular"
-                      color="WHITE"
-                      textAlign="center"
-                      alignItems="center"
-                    >
-                      {provider.provider_name.replace(" ", "\n")}
+                    <Text variant="Inter_600SemiBold" color="SECONDARY">
+                      {Number(movieDetails?.vote_average).toFixed(1)}
                     </Text>
+                  </S.Star>
+
+                  <Spacer width={8} />
+
+                  <S.Row>
+                    <FontAwesome name="clock-o" size={16} color="white" />
+
+                    <Spacer width={5} />
+
+                    <Text variant="Inter_400Regular" color="WHITE">
+                      {Math.floor(movieDetails?.runtime! / 60)}h{""}
+                      {movieDetails?.runtime! % 60}min
+                    </Text>
+                  </S.Row>
+                </S.Row>
+
+                <S.ButtonTeaser
+                  onPress={() => handlePress(videosDetails?.results[0]?.key)}
+                >
+                  <FontAwesome name="video-camera" size={20} color={"#FFFF"} />
+
+                  <Spacer width={5} />
+
+                  <Text
+                    variant="Inter_600SemiBold"
+                    color="WHITE"
+                    textAlign="justify"
+                  >
+                    Ver trailer
+                  </Text>
+                </S.ButtonTeaser>
+              </S.Info>
+
+              <Spacer height={15} />
+
+              <Text
+                variant="Inter_600SemiBold"
+                color="WHITE"
+                textAlign="justify"
+                fontSize={18}
+              >
+                Gênero
+              </Text>
+
+              <Spacer height={6} />
+
+              <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
+                {movieDetails?.genres.map((genre, index) => (
+                  <S.Genre
+                    key={genre.id}
+                    style={{
+                      marginBottom: 8,
+                      marginRight: index % 1 === 0 ? 5 : 0,
+                    }}
+                  >
+                    <Text variant="Inter_600SemiBold" color="SECONDARY">
+                      {genre.name}
+                    </Text>
+                  </S.Genre>
+                ))}
+              </View>
+
+              <Spacer height={10} />
+
+              <Text
+                variant="Inter_600SemiBold"
+                color="WHITE"
+                textAlign="justify"
+                fontSize={18}
+              >
+                Sinopse
+              </Text>
+
+              <Spacer height={8} />
+
+              <Text
+                variant="Inter_400Regular"
+                color="WHITE"
+                textAlign="justify"
+              >
+                {movieDetails?.overview}
+              </Text>
+              <Spacer height={8} />
+
+              <Text
+                variant="Inter_600SemiBold"
+                color="WHITE"
+                textAlign="justify"
+                fontSize={18}
+              >
+                Elenco
+              </Text>
+
+              <Spacer height={8} />
+
+              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                {creditsDetails?.cast.map((actor) => (
+                  <S.ActorContainer key={actor.id}>
+                    <CardCast actorDetails={actor} />
                   </S.ActorContainer>
-                ))
-              ) : (
-                <Text variant="Inter_400Regular" color="WHITE">
-                  Ainda não consta em nenhum catálogo!
-                </Text>
-              )}
-            </ScrollView>
-          </S.Details>
-        </>
-      )}
-    </S.Container>
+                ))}
+              </ScrollView>
+
+              <Spacer height={10} />
+
+              <Text
+                variant="Inter_600SemiBold"
+                color="WHITE"
+                textAlign="justify"
+                fontSize={18}
+              >
+                Onde assistir:
+              </Text>
+
+              <Spacer height={10} />
+
+              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                {flatrateProviders && flatrateProviders.length > 0 ? (
+                  flatrateProviders.map((provider) => (
+                    <S.ActorContainer key={provider.provider_id}>
+                      <S.CastImage
+                        source={{
+                          uri: `https://image.tmdb.org/t/p/original/${provider.logo_path}`,
+                        }}
+                      />
+                      <Text
+                        variant="Inter_400Regular"
+                        color="WHITE"
+                        textAlign="center"
+                        alignItems="center"
+                      >
+                        {provider.provider_name.replace(" ", "\n")}
+                      </Text>
+                    </S.ActorContainer>
+                  ))
+                ) : (
+                  <Text
+                    variant="Inter_400Regular"
+                    color="WHITE"
+                    textAlign="center"
+                    alignItems="center"
+                  >
+                    Ainda não consta em nenhum catálogo!
+                  </Text>
+                )}
+              </ScrollView>
+            </S.Details>
+          </>
+        )}
+      </S.Container>
+    </ScrollView>
   );
 }
