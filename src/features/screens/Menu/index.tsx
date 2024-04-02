@@ -72,7 +72,7 @@ export default function Menu() {
           <Ionicons name="chevron-forward" size={24} color="#FFFF" />
         </S.OptionButton>
 
-        <S.OptionButton>
+        <S.OptionButton onPress={() => navigation.navigate('UpdatePassword')}>
           <S.Row>
             <FontAwesome5 name="lock" size={24} color="#FFFF" />
             <Text

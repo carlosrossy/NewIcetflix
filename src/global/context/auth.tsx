@@ -35,7 +35,10 @@ type AuthContextData = {
   ) => Promise<void>;
   SingOut: () => Promise<void>;
   forgotPassword: (email: string) => Promise<void>;
-  updatePassword: (newPassword: string) => Promise<void>; // Adicionando a função de atualização de senha
+  updatePassword: (
+    newPassword: string,
+    currentPassword: string
+  ) => Promise<void>;
   islogin: boolean;
   isLoading: boolean;
   User: User | null;
@@ -220,17 +223,30 @@ function AuthProvider({ children }: AuthProviderProps) {
     }
   }
 
-  async function updatePassword(newPassword: string) {
+  async function updatePassword(newPassword: string, currentPassword: string) {
     try {
       setIsLoading(true);
       const user = auth().currentUser;
-      await user?.updatePassword(newPassword);
-      setIsLoading(false);
-      Toast.show({
-        type: "success",
-        text1: "Senha Atualizada",
-        text2: "Sua senha foi atualizada com sucesso.",
-      });
+
+      if (user) {
+        // Reautenticar o usuário
+        const credentials = auth.EmailAuthProvider.credential(
+          user?.email!,
+          currentPassword
+        );
+        await user.reauthenticateWithCredential(credentials);
+
+        await user.updatePassword(newPassword);
+
+        setIsLoading(false);
+        Toast.show({
+          type: "success",
+          text1: "Senha Atualizada",
+          text2: "Sua senha foi atualizada com sucesso.",
+        });
+      } else {
+        throw new Error("Usuário não encontrado.");
+      }
     } catch (error: any) {
       setIsLoading(false);
       console.error("Erro ao atualizar a senha:", error);
