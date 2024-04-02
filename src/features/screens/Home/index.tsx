@@ -74,9 +74,13 @@ export default function Home() {
 
             <Spacer width={13} />
 
-            <S.Button>
-              <FontAwesome5 name="user" size={24} color="#FFFF" />
-            </S.Button>
+            {User?.imageUrl ? (
+              <S.UserImage source={{ uri: User?.imageUrl }} />
+            ) : (
+              <S.Button>
+                <FontAwesome5 name="user" size={24} color="#FFFF" />
+              </S.Button>
+            )}
           </S.Buttons>
         </S.Header>
 
