@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as S from "./styles";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import {
@@ -20,12 +20,12 @@ import Text from "@global/components/Text";
 import { Spacer } from "@global/components/Spacer";
 
 import { Ionicons } from "@expo/vector-icons";
-import { FontAwesome5 } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
-import { Entypo } from "@expo/vector-icons";
 import { AppScreenNavigationProp } from "@global/routes/app.routes";
 import Toast from "react-native-toast-message";
 import { CardCast } from "@global/components/CardCast";
+import { useFavorite } from "@global/context/favorite";
+import { useAuth } from "@global/context/auth";
 
 interface IParamsRoutes {
   id: number;
@@ -35,11 +35,9 @@ export default function Details() {
   const navigation = useNavigation<AppScreenNavigationProp>();
   const route = useRoute();
   const { id } = route.params as IParamsRoutes;
-  const [isLiked, setIsLiked] = useState(false);
-
-  const handleHeartClick = () => {
-    setIsLiked(!isLiked);
-  };
+  const [isFavorite, setIsFavorite] = useState(false);
+  const { addFavoriteMovie, removeFavoriteMovie, favoriteMovies, getAllFavoriteMovies } = useFavorite();
+  const { User } = useAuth();
 
   const {
     data: movieDetails,
@@ -76,6 +74,7 @@ export default function Details() {
     queryKey: [`movieVideos_${id}`],
     queryFn: () => getVideo(id),
   });
+
   if (isErrorMovie || isErrorCredits || isErrorWatch) {
     return (
       <Text variant="Inter_400Regular" color="WHITE">
@@ -116,6 +115,52 @@ export default function Details() {
     }
   };
 
+  const allDetails = {
+    id: movieDetails?.id,
+    title: movieDetails?.title,
+    overview: movieDetails?.overview,
+    releaseDate: movieDetails?.release_date,
+    voteAverage: movieDetails?.vote_average,
+    runtime: movieDetails?.runtime,
+    genres: movieDetails?.genres,
+    backdropPath: movieDetails?.backdrop_path,
+    cast: creditsDetails?.cast,
+    providers: watchDetails?.results,
+    videosDetails: videosDetails,
+  };
+
+  useEffect(() => {
+    const isMovieFavorite = favoriteMovies.some(
+      (movie) => movie.id === movieDetails?.id
+    );
+    setIsFavorite(isMovieFavorite);
+  }, [favoriteMovies]);
+
+  useEffect(() => {
+    const fetchFavoriteMovies = async () => {
+      try {
+        const userId = User?.id!;
+        const movies = await getAllFavoriteMovies(userId);
+        const isMovieFavorite = movies.some((favMovie) => favMovie.id === movieDetails?.id);
+        setIsFavorite(isMovieFavorite);
+      } catch (error) {
+        console.error("Erro ao obter filmes favoritos:", error);
+      }
+    };
+
+    fetchFavoriteMovies();
+  }, [getAllFavoriteMovies, movieDetails?.id]); 
+
+
+  const handleHeartClick = () => {
+    if (isFavorite) {
+      removeFavoriteMovie(movieDetails?.id.toString()!, User?.id!);
+    } else {
+      addFavoriteMovie(movieDetails?.id.toString()!, allDetails, User?.id!);
+    }
+    setIsFavorite(!isFavorite);
+  };
+
   return (
     <ScrollView style={{ flex: 1, backgroundColor: "#121011" }}>
       <S.Container>
@@ -143,7 +188,11 @@ export default function Details() {
 
               <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <S.Button onPress={handleHeartClick}>
-                <FontAwesome name={isLiked ? "heart" : "heart-o"} size={24} color={isLiked ? "#56AB2F" : "#FFFF"} />
+                  <FontAwesome
+                    name={isFavorite ? "heart" : "heart-o"}
+                    size={24}
+                    color={isFavorite ? "#56AB2F" : "#FFFF"}
+                  />
                 </S.Button>
               </View>
             </S.Buttons>

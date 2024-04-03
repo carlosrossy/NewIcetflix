@@ -190,12 +190,6 @@ function AuthProvider({ children }: AuthProviderProps) {
     setIsLogin(false);
   }
 
-  async function SingOut() {
-    await auth().signOut();
-    await AsyncStorage.removeItem(USER_COLLETION);
-    setUser(null);
-  }
-
   async function forgotPassword(email: string) {
     try {
       const userSnapshot = await firestore()
@@ -270,20 +264,22 @@ function AuthProvider({ children }: AuthProviderProps) {
   ) {
     try {
       setIsLoading(true);
-  
+
       await firestore().collection("users").doc(userId).update({
         name: newName,
         imageUrl: newImageUrl,
       });
-  
+
       setUser((prevUser: User | null) => ({
         ...prevUser!,
         name: newName,
         imageUrl: newImageUrl,
       }));
-  
+
+      await getUserData(userId);
+
       await loadUserStorageData();
-  
+
       Toast.show({
         type: "success",
         text1: "Dados Atualizados",
@@ -300,6 +296,36 @@ function AuthProvider({ children }: AuthProviderProps) {
     } finally {
       setIsLoading(false);
     }
+  }
+
+  async function getUserData(userId: string) {
+    try {
+      const userDoc = await firestore().collection("users").doc(userId).get();
+      if (userDoc.exists) {
+        const user = userDoc.data();
+
+        const userData = {
+          id: userDoc.id,
+          name: user?.name!,
+          email: user?.email!,
+          imageUrl: user?.imageUrl!,
+        };
+
+        await AsyncStorage.setItem(USER_COLLETION, JSON.stringify(userData));
+      } else {
+        console.error("Documento do usuário não encontrado.");
+        return null;
+      }
+    } catch (error) {
+      console.error("Erro ao obter dados do usuário:", error);
+      return null;
+    }
+  }
+
+  async function SingOut() {
+    await auth().signOut();
+    await AsyncStorage.removeItem(USER_COLLETION);
+    setUser(null);
   }
 
   useEffect(() => {
